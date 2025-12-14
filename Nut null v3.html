@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms with Validation</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .forms-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+        .form-container {
+            background: #282828;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 1px solid #404040;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+        }
+        h2 {
+            text-align: center;
+            color: #1DB954;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 15px;
+            font-weight: 500;
+            color: #b3b3b3;
+            font-size: 14px;
+        }
+        input, textarea, select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #404040;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #333333;
+            color: #ffffff;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #1DB954;
+            box-shadow: 0 0 8px rgba(29, 185, 84, 0.5);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        button {
+            margin-top: 25px;
+            padding: 14px;
+            background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #1ed760 0%, #1DB954 100%);
+            transform: scale(1.05);
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .error {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+        .hidden {
+            display: none;
+        }
+        .form-group {
+            position: relative;
+        }
+        .form-group::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEwIDJDMTMuMzA5IDIgMTYgNC42OTEgMTYgOEwxNiAxNkgxNFY4QzE0IDYuMjA5IDEyLjIwOSAxMCAxMCAxMEM3Ljc5MSAxMCA2IDYuMjA5IDYgOFYxNEg0VjggQzQgNC42OTEgNi42OTEgMiAxMCAyWiIgc3Ryb2tlPSIjMUI5OTU0IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K') no-repeat center;
+            opacity: 0.7;
+            z-index: 1;
+        }
+        input, textarea {
+            padding-left: 40px;
+        }
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 20px;
+            }
+            h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="forms-wrapper">
+        <div class="form-container">
+            <h2>Login Form</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username / Email Address:</label>
+                    <input type="email" id="username" name="username" required>
+                    <div class="error hidden" id="usernameError">Please enter a valid email.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required minlength="6">
+                    <div class="error hidden" id="passwordError">Password must be at least 6 characters.</div>
+                </div>
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <div class="form-container">
+            <h2>Registration Form</h2>
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="fullname">Full Name:</label>
+                    <input type="text" id="fullname" name="fullname" required minlength="8" maxlength="16">
+                    <div class="error hidden" id="fullnameError">Full name must be 8-16 characters.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastname">Last Name:</label>
+                    <input type="text" id="lastname" name="lastname" required minlength="8" maxlength="16">
+                    <div class="error hidden" id="lastnameError">Last name must be 8-16 characters.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="birthday">Birthday:</label>
+                    <input type="date" id="birthday" name="birthday" required>
+                    <div class="error hidden" id="birthdayError">Please select a valid date.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact">Contact Number:</label>
+                    <input type="tel" id="contact" name="contact" required pattern="[0-9]{10}">
+                    <div class="error hidden" id="contactError">Please enter a 10-digit number.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Home Address:</label>
+                    <textarea id="address" name="address" required></textarea>
+                    <div class="error hidden" id="addressError">Home address is required.</div>
+                </div>
+
+                <button type="submit">Register</button>
+            </form>
+        </div>
+
+        <div class="form-container">
+            <h2>Order Form</h2>
+            <form id="orderForm">
+                <div class="form-group">
+                    <label for="productName">Product Name:</label>
+                    <input type="text" id="productName" name="productName" required>
+                    <div class="error hidden" id="productNameError">Product name is required.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productDesc">Product Description:</label>
+                    <textarea id="productDesc" name="productDesc" required></textarea>
+                    <div class="error hidden" id="productDescError">Product description is required.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" required min="1" onchange="calculateAmount()">
+                    <div class="error hidden" id="quantityError">Quantity must be at least 1.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">Total Amount (Quantity * $10/unit):</label>
+                    <input type="text" id="amount" name="amount" readonly>
+                    <div class="error hidden" id="amountError">Amount calculation error.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="deliveryDate">Delivery Date:</label>
+                    <input type="date" id="deliveryDate" name="deliveryDate" required>
+                    <div class="error hidden" id="deliveryDateError">Please select a valid delivery date.</div>
+                </div>
+
+                <button type="submit">Place Order</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Function to calculate amount for order form
+        function calculateAmount() {
+            const quantity = document.getElementById('quantity').value;
+            const unitPrice = 10; // Assuming $10 per unit
+            const amount = quantity * unitPrice;
+            document.getElementById('amount').value = `$${amount}`;
+        }
+
+        // Validation functions
+        function validateForm(formId, fields) {
+            let isValid = true;
+            fields.forEach(field => {
+                const element = document.getElementById(field.id);
+                const errorElement = document.getElementById(field.errorId);
+                if (!element.checkValidity()) {
+                    errorElement.classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    errorElement.classList.add('hidden');
+                }
+            });
+            return isValid;
+        }
+
+        // Login form validation
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fields = [
+                { id: 'username', errorId: 'usernameError' },
+                { id: 'password', errorId: 'passwordError' }
+            ];
+            if (validateForm('loginForm', fields)) {
+                alert('Login successful!');
+                // Here you can add actual login logic
+            }
+        });
+
+        // Registration form validation
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fields = [
+                { id: 'fullname', errorId: 'fullnameError' },
+                { id: 'lastname', errorId: 'lastnameError' },
+                { id: 'birthday', errorId: 'birthdayError' },
+                { id: 'contact', errorId: 'contactError' },
+                { id: 'address', errorId: 'addressError' }
+            ];
+            if (validateForm('registrationForm', fields)) {
+                alert('Registration successful!');
+                // Here you can add actual registration logic
+            }
+        });
+
+        // Order form validation
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fields = [
+                { id: 'productName', errorId: 'productNameError' },
+                { id: 'productDesc', errorId: 'productDescError' },
+                { id: 'quantity', errorId: 'quantityError' },
+                { id: 'deliveryDate', errorId: 'deliveryDateError' }
+            ];
+            if (validateForm('orderForm', fields)) {
+                alert('Order placed successfully!');
+                // Here you can add actual order logic
+            }
+        });
+    </script>
+</body>
+</html>
